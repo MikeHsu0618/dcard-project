@@ -1,10 +1,14 @@
 package UrlControllers
 
 import (
+	"dcard-project/app/Logic/decimalConvert"
 	. "dcard-project/database"
 	"dcard-project/models"
 	"github.com/gin-gonic/gin"
+	"math/rand"
 	"net/http"
+	"strings"
+	"time"
 )
 
 func Show(c *gin.Context) {
@@ -19,6 +23,7 @@ func Show(c *gin.Context) {
 }
 
 func Create(c *gin.Context) {
+	// 接收參數
 	url := models.Url{}
 	if err := c.ShouldBind(&url); err != nil {
 		c.JSON(404, gin.H{
@@ -28,20 +33,49 @@ func Create(c *gin.Context) {
 		return
 	}
 
+	// 檢查原網址
+	res, err := http.Get(url.OrgUrl)
+	if err != nil || res.StatusCode != 200 {
+		c.JSON(404, gin.H{
+			"data":    "",
+			"message": "invalid url",
+		})
+		return
+	}
+
+	// TODO 取得 autoIncrement index id
+	//var idInt int64 = 1
+	// 產生亂數
+	rand.Seed(time.Now().Unix())
+	randNum := int64(rand.Intn(10000000))
+	var basicAmount int64 = int64(20000)
+	shortUrl := decimalConvert.Encode(basicAmount + randNum)
+
+	// 檢查是否已重複
 	result := Db.Create(&models.Url{
 		OrgUrl:   url.OrgUrl,
-		ShortUrl: url.OrgUrl,
+		ShortUrl: shortUrl,
 	})
 	if err := result.Error; err != nil {
+		if strings.Contains(err.Error(), "duplicate") {
+			duplicateUrl := &models.Url{}
+			Db.Where("org_url", url.OrgUrl).First(duplicateUrl)
+			c.JSON(200, gin.H{
+				"data":    duplicateUrl.ShortUrl,
+				"message": "success",
+			})
+			return
+		}
+
 		c.JSON(404, gin.H{
-			"data":    err.Error(),
+			"data":    "",
 			"message": "create fail",
 		})
 		return
 	}
 
 	c.JSON(200, gin.H{
-		"data":    url.OrgUrl,
+		"data":    shortUrl,
 		"message": "success",
 	})
 }

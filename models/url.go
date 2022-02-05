@@ -25,9 +25,9 @@ import (
 //fmt.Printf("結果是 = %v", result)
 
 type Url struct {
-	ID       int64  `json:"id" form:"id"`                                  // 列名为 `id`
-	OrgUrl   string `json:"org_url" form:"org_url" binding:"required"`     // 列名为 `org_url`
-	ShortUrl string `json:"short_url" form:"short_url" binding:"required"` // 列名为 `short_url`
+	ID       int64  `json:"id" form:"id"`                              // 列名为 `id`
+	OrgUrl   string `json:"org_url" form:"org_url" binding:"required"` // 列名为 `org_url`
+	ShortUrl string `json:"short_url"`                                 // 列名为 `short_url`
 }
 
 type ApiUrl struct {

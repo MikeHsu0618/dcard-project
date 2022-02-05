@@ -1,8 +1,6 @@
 package main
 
-import (
-	"dcard-project/routers"
-)
+import "dcard-project/routers"
 
 func main() {
 	routers.SetRouter()
