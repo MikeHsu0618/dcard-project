@@ -22,7 +22,7 @@ const app = {
             // 取得網址
             try {
                 const res = await axios.post(`/link`, {org_url: this.orgUrl})
-                port = location.port ? `:${location.port}` : ''
+                let port = location.port ? `:${location.port}` : ''
                 this.shortUrl = location.hostname + port + '/link/' + res.data.data
             } catch (e) {
                 this.shortUrl = ""
@@ -62,6 +62,5 @@ const app = {
         this.setToastr()
     }
 }
-
 
 Vue.createApp(app).mount('#app')

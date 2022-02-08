@@ -11,7 +11,7 @@ COPY go.mod ./
 COPY go.sum ./
 RUN go mod download
 
-COPY *.go ./
+COPY . .
 
 RUN go build -o /main
 
@@ -22,6 +22,8 @@ FROM gcr.io/distroless/base-debian10
 
 WORKDIR /
 
+COPY ./resources /resources
+
 COPY --from=build /main /main
 
 EXPOSE 8080
@@ -29,3 +31,4 @@ EXPOSE 8080
 USER nonroot:nonroot
 
 ENTRYPOINT ["/main"]
+
