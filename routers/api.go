@@ -8,9 +8,6 @@ import (
 
 func SetRouter() {
 	router := gin.Default()
-	//config := cors.DefaultConfig()
-	//config.AllowAllOrigins = true
-	//router.Use(cors.New(config))
 	router.Delims("{{{", "}}}")
 	router.LoadHTMLGlob("resources/views/*")
 	router.Static("/asset", "./resources/asset")
