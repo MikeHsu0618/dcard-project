@@ -19,7 +19,8 @@ func init() {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%v "+
 		"sslmode=disable TimeZone=Asia/Shanghai", host, user, db, pwd, port)
 
-	Db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	var err error
+	Db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	if err != nil {
 		fmt.Printf("mysql connect error %v", err)

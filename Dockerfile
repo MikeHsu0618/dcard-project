@@ -6,6 +6,10 @@ WORKDIR /app
 
 COPY go.mod ./
 COPY go.sum ./
+
+RUN go get github.com/codegangsta/gin
+RUN go install github.com/codegangsta/gin
+
 RUN go mod download
 
 EXPOSE 8080
