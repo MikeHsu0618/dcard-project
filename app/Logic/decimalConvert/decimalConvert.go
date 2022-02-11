@@ -1,4 +1,4 @@
-package decimalConvert
+package DecimalConvert
 
 import (
 	"math"

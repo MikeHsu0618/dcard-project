@@ -1,7 +1,7 @@
-package UrlControllers
+package UrlController
 
 import (
-	"dcard-project/app/Logic/decimalConvert"
+	"dcard-project/app/Logic/DecimalConvert"
 	. "dcard-project/database"
 	"dcard-project/models"
 	"github.com/gin-gonic/gin"
@@ -49,7 +49,7 @@ func Create(c *gin.Context) {
 	rand.Seed(time.Now().Unix())
 	randNum := int64(rand.Intn(10000000))
 	var basicAmount int64 = int64(20000)
-	shortUrl := decimalConvert.Encode(basicAmount + randNum)
+	shortUrl := DecimalConvert.Encode(basicAmount + randNum)
 
 	// 檢查是否已重複
 	result := Db.Create(&models.Url{
@@ -83,5 +83,15 @@ func Create(c *gin.Context) {
 func ToOrgPage(c *gin.Context) {
 	url := &models.Url{}
 	Db.Where("short_url", c.Param("shortUrl")).First(url)
+
+	// To Page not found
+	if len(url.OrgUrl) == 0 {
+		c.HTML(
+			http.StatusNotFound,
+			"404.html",
+			gin.H{"title": "無效的地址"},
+		)
+		return
+	}
 	c.Redirect(http.StatusFound, url.OrgUrl)
 }

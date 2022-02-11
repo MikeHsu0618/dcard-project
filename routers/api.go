@@ -1,8 +1,9 @@
 package routers
 
 import (
-	"dcard-project/app/Api/Controllers/UrlControllers"
+	"dcard-project/app/Api/Controllers/UrlController"
 	"dcard-project/app/Http/Controllers/IndexController"
+	"dcard-project/app/Logic/Log"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,9 +17,13 @@ func SetRouter() {
 
 	v1Router := router.Group("/link")
 	{
-		v1Router.POST("", UrlControllers.Create)
-		v1Router.GET("/:shortUrl", UrlControllers.ToOrgPage)
+		v1Router.POST("", UrlController.Create)
+		v1Router.GET("/:shortUrl", UrlController.ToOrgPage)
 	}
 
-	router.Run()
+	err := router.Run()
+	if err != nil {
+		Log.Error.Println("Route Run Error")
+		return
+	}
 }
