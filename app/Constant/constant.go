@@ -1,7 +1,6 @@
 package Constant
 
-var (
-	UrlIndexKey = "url_index_key"
+const (
 	LockKey     = "lock_key"
 	BasicAmount = int64(20000)
 )

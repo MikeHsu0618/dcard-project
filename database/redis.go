@@ -31,12 +31,13 @@ func init() {
 func Lock(key string) bool {
 	mutex.Lock()
 	defer mutex.Unlock()
-	bool, err := Redis.SetNX(ctx, key, 1, 3*time.Second).Result()
+	boolean, err := Redis.SetNX(ctx, key, 1, 3*time.Second).Result()
 	if err != nil {
 		Log.Error.Println(err.Error())
 	}
-	return bool
+	return boolean
 }
+
 func UnLock(key string) int64 {
 	nums, err := Redis.Del(ctx, key).Result()
 	if err != nil {
