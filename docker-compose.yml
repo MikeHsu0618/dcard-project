@@ -60,6 +60,16 @@ services:
     command:
       /bin/bash -c "redis-server /usr/local/etc/redis/redis.conf"
 
+  migrate:
+    image: migrate/migrate
+    container_name: "migrate"
+    networks:
+      - fullstack
+    volumes:
+      - ./database/migrations:/migrations
+    depends_on:
+      - postgres
+    command: [ "-path", "/migrations", "-database",  "postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable", "down", "1"]
 
 networks:
   fullstack:
