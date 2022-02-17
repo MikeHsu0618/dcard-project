@@ -14,9 +14,10 @@ import (
 )
 
 var ctx = context.Background()
-var url = &models.Url{}
 
 func Create(c *gin.Context) {
+	var url = &models.Url{}
+
 	// 接收參數
 	if err := c.ShouldBind(&url); err != nil {
 		c.JSON(404, gin.H{
@@ -74,6 +75,7 @@ func Create(c *gin.Context) {
 }
 
 func ToOrgPage(c *gin.Context) {
+	var url = &models.Url{}
 	// 使用快取
 	if result, _ := Redis.Get(ctx, c.Param("shortUrl")).Result(); len(result) != 0 {
 		println("我用快取拉 我發達了", result)
@@ -111,6 +113,7 @@ func ToOrgPage(c *gin.Context) {
 }
 
 func getShortUrl() (shortUrl string) {
+	var url = &models.Url{}
 	index, err := url.Count()
 	if err != nil {
 		Log.Error.Println(err)

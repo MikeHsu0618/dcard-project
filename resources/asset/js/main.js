@@ -15,11 +15,13 @@ const app = {
 
             if (!this.orgUrl) {
                 this.shortUrl = ""
+                this.value = ""
                 return
             }
 
             if (!this.orgUrl.includes(`https://`) && !this.orgUrl.includes(`http://`)) {
                 this.shortUrl = ""
+                this.value = ""
                 toastr['error']('網址好像不太完整唷！', '錯誤')
                 return
             }
@@ -33,6 +35,7 @@ const app = {
                 this.makeQrcode()
             } catch (e) {
                 this.shortUrl = ""
+                this.value = ""
                 toastr['error']('好像是個無效的網址唷！', '錯誤')
                 console.log(e)
             }
