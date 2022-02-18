@@ -2,7 +2,6 @@ package database
 
 import (
 	"context"
-	"dcard-project/app/Logic/Log"
 	"github.com/go-redis/redis/v8"
 	_ "github.com/joho/godotenv/autoload"
 	"os"
@@ -33,7 +32,7 @@ func Lock(key string) bool {
 	defer mutex.Unlock()
 	boolean, err := Redis.SetNX(ctx, key, 1, 3*time.Second).Result()
 	if err != nil {
-		Log.Error.Println(err.Error())
+		println(err.Error())
 	}
 	return boolean
 }
@@ -41,7 +40,7 @@ func Lock(key string) bool {
 func UnLock(key string) int64 {
 	nums, err := Redis.Del(ctx, key).Result()
 	if err != nil {
-		Log.Error.Println(err.Error())
+		println(err.Error())
 		return 0
 	}
 	return nums

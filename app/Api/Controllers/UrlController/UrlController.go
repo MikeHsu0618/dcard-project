@@ -4,7 +4,6 @@ import (
 	"context"
 	"dcard-project/app/Constant"
 	"dcard-project/app/Logic/DecimalConvert"
-	"dcard-project/app/Logic/Log"
 	. "dcard-project/database"
 	"dcard-project/models"
 	"github.com/gin-gonic/gin"
@@ -42,7 +41,7 @@ func Create(c *gin.Context) {
 		shortUrl,
 		url.OrgUrl,
 		30*24*time.Hour).Result(); err != nil {
-		Log.Error.Println("Redis Set Url Error", err.Error())
+		println("Redis Set Url Error", err.Error())
 		return
 	}
 	// 檢查是否已重複
@@ -116,7 +115,7 @@ func getShortUrl() (shortUrl string) {
 	var url = &models.Url{}
 	index, err := url.Count()
 	if err != nil {
-		Log.Error.Println(err)
+		println(err)
 		return
 	}
 	shortUrl = DecimalConvert.Encode(Constant.BasicAmount + index)

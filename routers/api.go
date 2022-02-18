@@ -4,7 +4,6 @@ import (
 	"dcard-project/app/Api/Controllers/UrlController"
 	"dcard-project/app/Http/Controllers/IndexController"
 	. "dcard-project/app/Http/Middleware"
-	"dcard-project/app/Logic/Log"
 	"github.com/gin-gonic/gin"
 )
 
@@ -24,7 +23,7 @@ func SetRouter() {
 
 	err := router.Run()
 	if err != nil {
-		Log.Error.Println("Route Run Error")
+		println("Route Run Error")
 		return
 	}
 }
