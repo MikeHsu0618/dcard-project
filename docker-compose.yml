@@ -15,24 +15,17 @@ services:
     volumes:
       - database_postgres:/var/lib/postgresql/data
 
-#  golang:
-#    build: .
-#    container_name: "golang"
-#    environment:
-#      DB_USERNAME: "postgres"
-#      DB_PASSWORD: "postgres"
-#      DB_DB: "postgres"
-#      DB_HOST: "postgres"
-#      DB_TABLE: "postgres"
-#      DB_PORT: "5432"
-#    ports:
-#      - "8080:8080"
-#    depends_on:
-#      - postgres
-#    networks:
-#      - fullstack
-#    volumes:
-#      - ./.env.prod:/.env
+  golang-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: "golang-prod"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - fullstack
 
   golang:
     build: .
