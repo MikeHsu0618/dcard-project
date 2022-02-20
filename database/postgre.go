@@ -17,7 +17,7 @@ func init() {
 	pwd := os.Getenv("POSTGRES_PASSWORD")
 	port := os.Getenv("POSTGRES_PORT")
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%v "+
-		"sslmode=disable TimeZone=Asia/Shanghai", host, user, db, pwd, port)
+		"sslmode=disable TimeZone=Asia/Shanghai", host, user, pwd, db, port)
 
 	var err error
 	Db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})

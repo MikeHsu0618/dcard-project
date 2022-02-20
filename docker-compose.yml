@@ -16,9 +16,7 @@ services:
       - database_postgres:/var/lib/postgresql/data
 
   golang-prod:
-    build:
-      context: .
-      dockerfile: Dockerfile.dev
+    build: .
     container_name: "golang-prod"
     ports:
       - "8080:8080"
@@ -28,7 +26,9 @@ services:
       - fullstack
 
   golang:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     container_name: "golang"
     ports:
       - "8080:8080"
@@ -47,22 +47,23 @@ services:
     container_name: 'redis'
     networks:
       - fullstack
+    restart: always
     volumes:
       - ./redis.conf:/usr/local/etc/redis/redis.conf
       - ./storage/data:/data
     command:
       /bin/bash -c "redis-server /usr/local/etc/redis/redis.conf"
 
-  migrate:
-    image: migrate/migrate
-    container_name: "migrate"
-    networks:
-      - fullstack
-    volumes:
-      - ./database/migrations:/migrations
-    depends_on:
-      - postgres
-    command: [ "-path", "/migrations", "-database",  "postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable", "down", "1"]
+#  migrate:
+#    image: migrate/migrate
+#    container_name: "migrate"
+#    networks:
+#      - fullstack
+#    volumes:
+#      - ./database/migrations:/migrations
+#    depends_on:
+#      - postgres
+#    command: [ "-path", "/migrations", "-database",  "postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable", "down", "1"]
 
 networks:
   fullstack:
