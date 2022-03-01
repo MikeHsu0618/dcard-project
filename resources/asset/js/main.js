@@ -4,6 +4,9 @@ const app = {
             orgUrl: "",
             shortUrl: "",
             value: "",
+            title: "",
+            image: "",
+            description: ""
         }
     },
     methods: {
@@ -30,7 +33,9 @@ const app = {
             try {
                 const res = await axios.post(`/link`, {org_url: this.orgUrl})
                 let port = location.port ? `:${location.port}` : ''
-                this.shortUrl = location.protocol + '//' + location.hostname + port + '/link/' + res.data.data
+                this.shortUrl = location.protocol + '//' + location.hostname + port + '/link/' + res.data.data.short_url
+                this.title = res.data.data.title
+                this.image = res.data.data.image
                 this.value = this.orgUrl
                 this.makeQrcode()
             } catch (e) {

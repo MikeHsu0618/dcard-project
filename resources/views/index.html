@@ -15,7 +15,7 @@
             <li><a href="#" class='active'>Search</a></li>
         </ul>
     </div>
-    <img class='profile' style="width: 35px ;background-color: #f1f1f1; border: none; margin-top: -10px;" src='/asset/img/loge.png'/>
+    <img class='profile' style="width: 35px ;background-color: #f1f1f1; border: none; margin-top: -10px;" src='/asset/img/logo.png'/>
     <div class="logo-parent">
         <h1 class='logo'>Dcard 短網址</h1>
     </div>
@@ -29,6 +29,15 @@
     <transition name="slide-fade">
         <div v-show="shortUrl">
             <div class="shortUrl">
+                <div class="meta">
+
+                    <img v-if="!image" class="w-full" src="/asset/img/no_image.png" style="width: 140px;" alt="meta image">
+                    <img v-else class="w-full" :src="image" style="width: 250px;" alt="meta image">
+                    <div class="px-6 py-4">
+                        <div class="font-bold text-xl mb-2"> {{ title }} </div>
+                    </div>
+                </div>
+                <br>
                 <div id="qrcode"></div>
                 <div>{{ shortUrl }}</div>
             </div>

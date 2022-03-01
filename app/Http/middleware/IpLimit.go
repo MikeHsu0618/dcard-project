@@ -13,7 +13,7 @@ import (
 const (
 	IPLimitPeriod           = 3600
 	IPLimitTimeFormat       = "2006-01-02 15:04:05"
-	IPLimitMaximum    int64 = 1000
+	IPLimitMaximum    int64 = 100
 )
 
 var ctx = context.Background()

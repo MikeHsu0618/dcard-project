@@ -2,7 +2,8 @@ DROP TABLE IF EXISTS urls CASCADE;
 
 CREATE TABLE urls
 (
-    id BIGSERIAL PRIMARY KEY NOT NULL,
-    short_url varchar(50) NOT NULL UNIQUE,
-    org_url varchar(255) NOT NULL UNIQUE
+    id         SERIAL,
+    org_url    varchar(255) NOT NULL UNIQUE,
+    created_at TIMESTAMP    NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP    NOT NULL DEFAULT NOW()
 );

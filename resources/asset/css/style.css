@@ -326,3 +326,9 @@ button:hover .button-text {
     margin: 10px;
     display: inline-block;
 }
+
+.meta {
+    display: inline-block;
+    width: 300px;
+    overflow: hidden;
+}
