@@ -31,9 +31,9 @@ const app = {
 
             // 取得網址
             try {
-                const res = await axios.post(`/link`, {org_url: this.orgUrl})
+                const res = await axios.post(`/`, {org_url: this.orgUrl})
                 let port = location.port ? `:${location.port}` : ''
-                this.shortUrl = location.protocol + '//' + location.hostname + port + '/link/' + res.data.data.short_url
+                this.shortUrl = location.protocol + '//' + location.hostname + port + '/' + res.data.data.short_url
                 this.title = res.data.data.title
                 this.image = res.data.data.image
                 this.value = this.orgUrl

@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  postgresql-master:
+  pg-master:
     image: 'docker.io/bitnami/postgresql:14'
     container_name: "pg-master"
     ports:
@@ -20,47 +20,47 @@ services:
       - POSTGRESQL_SYNCHRONOUS_COMMIT_MODE=on
       - POSTGRESQL_NUM_SYNCHRONOUS_REPLICAS=1
 
-  postgresql-slave1:
+  pg-slave:
     image: 'docker.io/bitnami/postgresql:14'
-    container_name: "pg-slave1"
+    container_name: "pg-slave"
     ports:
       - '5433:5432'
     depends_on:
-      - postgresql-master
+      - pg-master
     networks:
       - fullstack
     environment:
       - POSTGRESQL_REPLICATION_MODE=slave
       - POSTGRESQL_REPLICATION_USER=repl_user
       - POSTGRESQL_REPLICATION_PASSWORD=postgres
-      - POSTGRESQL_MASTER_HOST=postgresql-master
+      - POSTGRESQL_MASTER_HOST=pg-master
       - POSTGRESQL_MASTER_PORT_NUMBER=5432
       - POSTGRESQL_PASSWORD=postgres
 
-  golang-prod:
+  dcard-project:
     build: .
-    container_name: "golang-prod"
+    container_name: "dcard-project"
     ports:
       - "8080:8080"
     depends_on:
-      - postgres
+      - pg-master
     networks:
       - fullstack
 
-  golang:
-    build:
-      context: .
-      dockerfile: Dockerfile.dev
-    container_name: "golang"
-    ports:
-      - "8080:8080"
-    volumes:
-      - .:/app
-    command: gin -p 8080 /app/main.go
-    depends_on:
-      - postgres
-    networks:
-      - fullstack
+#  golang:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.dev
+#    container_name: "golang"
+#    ports:
+#      - "8080:8080"
+#    volumes:
+#      - .:/app
+#    command: gin -p 8080 /app/main.go
+#    depends_on:
+#      - postgres
+#    networks:
+#      - fullstack
 
   redis:
     image: redis:6.0-buster
@@ -76,22 +76,19 @@ services:
     command:
       /bin/bash -c "redis-server /usr/local/etc/redis/redis.conf"
 
-#  migrate:
-#    image: migrate/migrate
-#    container_name: "migrate"
-#    networks:
-#      - fullstack
-#    volumes:
-#      - ./database/migrations:/migrations
-#    depends_on:
-#      - postgres
-#    command: [ "-path", "/migrations", "-database",  "postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable", "down", "1"]
+  migrate:
+    image: migrate/migrate
+    container_name: "migrate"
+    networks:
+      - fullstack
+    volumes:
+      - ./database/migrations:/migrations
+    command: [ "-path", "/migrations", "-database",  "postgres://postgres:postgres@pg-master:5432/postgres?sslmode=disable", "up"]
 
 networks:
   fullstack:
     driver: bridge
 
 volumes:
-  database_postgres:
   postgresql_master_data:
     driver: local
