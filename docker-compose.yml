@@ -72,7 +72,7 @@ services:
     restart: always
     volumes:
       - ./redis.conf:/usr/local/etc/redis/redis.conf
-      - ./storage/data:/data
+      - redis_data:/data
     command:
       /bin/bash -c "redis-server /usr/local/etc/redis/redis.conf"
 
@@ -90,5 +90,6 @@ networks:
     driver: bridge
 
 volumes:
+  redis_data:
   postgresql_master_data:
     driver: local

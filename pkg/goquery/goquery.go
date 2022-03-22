@@ -1,4 +1,4 @@
-package Goquery
+package goquery
 
 import (
 	"github.com/PuerkitoBio/goquery"
@@ -7,9 +7,9 @@ import (
 )
 
 type Meta struct {
-	Title       string `json:"title" form:"title"`
-	Image       string `json:"image" form:"image"`
-	Description string `json:"description" form:"description"`
+	Title       string `json:"title" form:"title" example:"Meta title"`
+	Image       string `json:"image" form:"image" example:"Meta Image Url"`
+	Description string `json:"description" form:"description" example:"Meta Description"`
 }
 
 func GetHtmlMeta(resultBody io.ReadCloser) Meta {

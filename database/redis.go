@@ -19,7 +19,7 @@ var (
 	pws  = os.Getenv("REDIS_PASSWORD")
 )
 
-func init() {
+func NewRedisClient() {
 	Redis = redis.NewClient(&redis.Options{
 		Addr:     host + ":" + port,
 		Password: pws, // no password set

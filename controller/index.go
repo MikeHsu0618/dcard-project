@@ -1,11 +1,11 @@
-package IndexController
+package controller
 
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
-func Show(c *gin.Context) {
+func Index(c *gin.Context) {
 	c.HTML(
 		http.StatusOK,
 		"index.html",

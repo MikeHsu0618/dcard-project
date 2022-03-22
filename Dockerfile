@@ -13,7 +13,7 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o /main
+RUN go build ./cmd/app/main.go
 
 ##
 ## Deploy
@@ -25,7 +25,7 @@ WORKDIR /
 COPY /resources /resources
 COPY /.env.prod /.env
 
-COPY --from=build /main /main
+COPY --from=build /app/main /main
 
 EXPOSE 8080
 

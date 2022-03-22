@@ -84,6 +84,8 @@ CREATE TABLE urls
 (
     id         BIGSERIAL,
     org_url    varchar(255) NOT NULL UNIQUE,
+    
+    // 如果有產生時間的排序需求, 非常建議在 created_at 加上索引
     created_at TIMESTAMP    NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP    NOT NULL DEFAULT NOW()
 );
@@ -117,7 +119,7 @@ DROP table IF EXISTS urls;
 # 透過 git clone 專案到主機任意路徑下
 git clone https://github.com/MikeHsu0618/dcard-project.git
 ```
-#### 運行專案
+#### 運行專案 (Docker 環境)
 
 ````bash
 # 在本專案的根目錄下執行以下指令即可
@@ -130,6 +132,11 @@ docker compose up -d pg-master pg-slave dcard-project redis
 docker compose up -d migrate
 ```
 
+#### Swagger Document
+```
+// 運行成功起後, 可於以下路徑顯示 API 文件
+http://localhost:8080/swagger/index.html
+```
 ### 如何實現縮網址服務
 
 關於縮網址實現有許多做法，本專案說明如下：
