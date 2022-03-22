@@ -1,0 +1,48 @@
+definitions:
+  models.ApiUrl:
+    properties:
+      description:
+        example: Meta Description
+        type: string
+      image:
+        example: Meta Image Url
+        type: string
+      short_url:
+        example: 5Cb
+        type: string
+      title:
+        example: Meta title
+        type: string
+    type: object
+  models.createUrl:
+    properties:
+      org_url:
+        example: https://www.google.com
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /:
+    post:
+      consumes:
+      - application/json
+      description: 請輸入合法原網址
+      parameters:
+      - description: Get Short Url
+        in: body
+        name: url
+        required: true
+        schema:
+          $ref: '#/definitions/models.createUrl'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ApiUrl'
+      summary: 產生短網址
+      tags:
+      - Url
+swagger: "2.0"

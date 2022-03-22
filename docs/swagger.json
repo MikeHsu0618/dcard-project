@@ -1,0 +1,74 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/": {
+            "post": {
+                "description": "請輸入合法原網址",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Url"
+                ],
+                "summary": "產生短網址",
+                "parameters": [
+                    {
+                        "description": "Get Short Url",
+                        "name": "url",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.createUrl"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ApiUrl"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.ApiUrl": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "example": "Meta Description"
+                },
+                "image": {
+                    "type": "string",
+                    "example": "Meta Image Url"
+                },
+                "short_url": {
+                    "type": "string",
+                    "example": "5Cb"
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Meta title"
+                }
+            }
+        },
+        "models.createUrl": {
+            "type": "object",
+            "properties": {
+                "org_url": {
+                    "type": "string",
+                    "example": "https://www.google.com"
+                }
+            }
+        }
+    }
+}
