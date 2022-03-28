@@ -23,7 +23,7 @@ FROM gcr.io/distroless/base-debian10
 WORKDIR /
 
 COPY /resources /resources
-COPY /.env.prod /.env
+COPY /.env /.env
 
 COPY --from=build /app/main /main
 

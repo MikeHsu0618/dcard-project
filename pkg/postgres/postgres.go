@@ -1,4 +1,4 @@
-package database
+package postgres
 
 import (
     "fmt"
@@ -9,7 +9,7 @@ import (
     "os"
 )
 
-var Db *gorm.DB
+var db *gorm.DB
 var err error
 
 type DbConf struct {
@@ -20,7 +20,7 @@ type DbConf struct {
     port string
 }
 
-func NewPgClient() (*gorm.DB, error) {
+func NewPgClient() *gorm.DB {
     master := DbConf{
         host: os.Getenv("POSTGRES_HOST"),
         user: os.Getenv("POSTGRES_USER"),
@@ -37,27 +37,16 @@ func NewPgClient() (*gorm.DB, error) {
         port: os.Getenv("POSTGRES_SLAVE_PORT"),
     }
 
-    Db, err = gorm.Open(postgres.Open(GetPgDns(master)), &gorm.Config{})
-
-    if err != nil {
-        return nil, err
-    }
-
-    if Db.Error != nil {
-        return nil, err
-    }
-
-    err = Db.Use(dbresolver.Register(dbresolver.Config{
+    db, err = gorm.Open(postgres.Open(GetPgDns(master)), &gorm.Config{})
+    err = db.Use(dbresolver.Register(dbresolver.Config{
         Replicas: []gorm.Dialector{postgres.Open(GetPgDns(slave))},
     }))
-    if err != nil {
-        return nil, err
-    }
-    if Db.Error != nil {
-        return nil, err
+
+    if err != nil || db.Error != nil {
+        panic("database error")
     }
 
-    return Db, err
+    return db
 }
 
 func GetPgDns(conf DbConf) (dsn string) {
