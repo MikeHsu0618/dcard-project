@@ -2,4 +2,4 @@
 /gin-bin
 /storage/*
 /migrate.sh
-/dcard-project.pem
+/.idea
