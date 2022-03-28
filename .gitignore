@@ -1,5 +1,4 @@
 #/.env
-#/.env.prod
 /gin-bin
 /storage/*
 /migrate.sh

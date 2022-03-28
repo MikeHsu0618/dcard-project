@@ -6,6 +6,7 @@ services:
     container_name: "pg-master"
     ports:
       - '5432:5432'
+    restart: always
     volumes:
       - 'postgresql_master_data:/bitnami/postgresql'
     networks:
@@ -25,6 +26,7 @@ services:
     container_name: "pg-slave"
     ports:
       - '5433:5432'
+    restart: always
     depends_on:
       - pg-master
     networks:
