@@ -24,7 +24,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.createUrl"
+                            "$ref": "#/definitions/model.CreateUrl"
                         }
                     }
                 ],
@@ -32,7 +32,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.ApiUrl"
+                            "$ref": "#/definitions/model.ApiUrl"
                         }
                     }
                 }
@@ -40,7 +40,7 @@
         }
     },
     "definitions": {
-        "models.ApiUrl": {
+        "model.ApiUrl": {
             "type": "object",
             "properties": {
                 "description": {
@@ -61,7 +61,7 @@
                 }
             }
         },
-        "models.createUrl": {
+        "model.CreateUrl": {
             "type": "object",
             "properties": {
                 "org_url": {

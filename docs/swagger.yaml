@@ -1,5 +1,5 @@
 definitions:
-  models.ApiUrl:
+  model.ApiUrl:
     properties:
       description:
         example: Meta Description
@@ -14,7 +14,7 @@ definitions:
         example: Meta title
         type: string
     type: object
-  models.createUrl:
+  model.CreateUrl:
     properties:
       org_url:
         example: https://www.google.com
@@ -34,14 +34,14 @@ paths:
         name: url
         required: true
         schema:
-          $ref: '#/definitions/models.createUrl'
+          $ref: '#/definitions/model.CreateUrl'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.ApiUrl'
+            $ref: '#/definitions/model.ApiUrl'
       summary: 產生短網址
       tags:
       - Url

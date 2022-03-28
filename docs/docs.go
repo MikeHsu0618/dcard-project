@@ -36,7 +36,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.createUrl"
+                            "$ref": "#/definitions/model.CreateUrl"
                         }
                     }
                 ],
@@ -44,7 +44,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.ApiUrl"
+                            "$ref": "#/definitions/model.ApiUrl"
                         }
                     }
                 }
@@ -52,7 +52,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "models.ApiUrl": {
+        "model.ApiUrl": {
             "type": "object",
             "properties": {
                 "description": {
@@ -73,7 +73,7 @@ const docTemplate = `{
                 }
             }
         },
-        "models.createUrl": {
+        "model.CreateUrl": {
             "type": "object",
             "properties": {
                 "org_url": {
