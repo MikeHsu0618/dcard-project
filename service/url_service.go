@@ -66,7 +66,7 @@ func (s *UrlService) CreateUrl(c *gin.Context) {
         return
     }
 
-    //產生縮網址
+    //產生短網址
     shortUrl = decimalconv.Encode(BasicAmount + url.ID)
     data := model.ApiUrl{
         ShortUrl: shortUrl,

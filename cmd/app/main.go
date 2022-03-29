@@ -39,7 +39,7 @@ func setupStatic(r *gin.Engine) {
         c.HTML(
             http.StatusOK,
             "index.html",
-            gin.H{"title": "縮網址產生器"},
+            gin.H{"title": "短網址產生器"},
         )
     })
 }
