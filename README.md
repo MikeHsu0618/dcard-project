@@ -73,7 +73,7 @@ git clone https://github.com/MikeHsu0618/dcard-project.git
 
 ````bash
 # 在本專案的根目錄下執行以下指令即可
-# -d 代表背景運行(Optional)
+cp .env.example .env
 docker compose up -d pg-master pg-slave dcard-project redis
 ````
 #### 初始化資料庫
