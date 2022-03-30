@@ -21,6 +21,11 @@ const app = {
                 this.value = ""
                 return
             }
+            
+            if (this.orgUrl.includes(location.hostname)) {
+                toastr['error']('好像是個無效的網址唷！', '錯誤')
+                return
+            }
 
             if (!this.orgUrl.includes(`https://`) && !this.orgUrl.includes(`http://`)) {
                 this.shortUrl = ""
