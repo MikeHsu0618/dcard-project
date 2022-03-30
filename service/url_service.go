@@ -12,8 +12,9 @@ import (
 )
 
 const (
-	LockKey     = "lock_key"
-	BasicAmount = int64(20000)
+	LockKey       = "lock_key"
+	BasicAmount   = int64(20000)
+	UserAgentInfo = `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11`
 )
 
 type UrlService struct {
@@ -43,7 +44,7 @@ func (s *UrlService) CreateUrl(c *gin.Context) {
 	// 檢查原網址
 	client := &http.Client{}
 	req, _ := http.NewRequest(http.MethodGet, url.OrgUrl, nil)
-	req.Header.Set("User-Agent", `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11`)
+	req.Header.Set("User-Agent", UserAgentInfo)
 	res, err := client.Do(req)
 	if err != nil || res.StatusCode != http.StatusOK {
 		httputil.NewError(c, http.StatusNotFound, "invalid url")
@@ -52,7 +53,8 @@ func (s *UrlService) CreateUrl(c *gin.Context) {
 	meta := goquery.GetHtmlMeta(res.Body)
 	// 檢查是否已存在
 	err = s.repo.Create(url)
-	if err != nil && strings.Contains(err.Error(), "duplicate") {
+	if err != nil &&
+		(strings.Contains(err.Error(), "duplicate") || strings.Contains(err.Error(), "UNIQUE")) {
 		duplicateUrl, err := s.repo.GetByOrgUrl(url.OrgUrl)
 		if err != nil {
 			httputil.NewError(c, http.StatusNotFound, "data error")
