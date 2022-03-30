@@ -28,8 +28,8 @@ jobs:
       - name: Build
         run: go build ./cmd/app/main.go
 
-#      - name: Test
-#        run: go test -v ./test
+      - name: Test
+        run: go test -v ./test
 
   deploy_docker:
     runs-on: ubuntu-latest

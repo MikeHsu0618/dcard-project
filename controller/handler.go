@@ -1,24 +1,29 @@
 package controller
 
 import (
-    "dcard-project/middleware"
-    "dcard-project/model"
-    "github.com/gin-gonic/gin"
+	"dcard-project/middleware"
+	"dcard-project/model"
+	"github.com/gin-gonic/gin"
 )
 
 type Handler struct {
-    svc model.UrlService
+	urlSvc model.UrlService
 }
 
-func NewHandler(r *gin.Engine, s model.UrlService) {
-    handler := &Handler{
-        svc: s,
-    }
+type Config struct {
+	R      *gin.Engine
+	UrlSvc model.UrlService
+}
 
-    v1Group := r.Group("/")
-    v1Group.Use(middleware.IPLimitIntercept())
-    {
-        v1Group.POST("", handler.svc.CreateUrl)
-        v1Group.GET(":shortUrl", handler.svc.ToOrgPage)
-    }
+func NewHandler(c *Config) {
+	handler := &Handler{
+		urlSvc: c.UrlSvc,
+	}
+
+	v1Group := c.R.Group("/")
+	v1Group.Use(middleware.IPLimitIntercept())
+	{
+		v1Group.POST("", handler.urlSvc.CreateUrl)
+		v1Group.GET(":shortUrl", handler.urlSvc.ToOrgPage)
+	}
 }

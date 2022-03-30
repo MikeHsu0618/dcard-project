@@ -2,24 +2,15 @@ package main
 
 import (
     "dcard-project/model"
-    "dcard-project/pkg/migration"
-    "dcard-project/pkg/postgres"
     rds "dcard-project/pkg/redis"
-    "dcard-project/pkg/testutil"
     "dcard-project/repository"
     "dcard-project/service"
     "github.com/gin-gonic/gin"
     "github.com/go-redis/redis/v8"
+    "gorm.io/driver/sqlite"
     "gorm.io/gorm"
     "os"
-    "path"
-    "runtime"
-    "strings"
     "testing"
-)
-
-const (
-    file = ".env.testing"
 )
 
 var (
@@ -37,44 +28,24 @@ func TestMain(m *testing.M) {
 }
 
 func teardrop() {
+    initDBTable()
     println("tearDrop")
 }
 
 func setup() {
     println("setup")
-    testutil.LoadEnv(file)
     initService()
 }
 
 func initService() {
-    db = postgres.NewPgClient()
-    client = rds.NewRedisClient()
+    db, _ = gorm.Open(sqlite.Open("./url_test.db"), &gorm.Config{})
+    client = rds.NewTestRedisClient()
     repo := repository.NewUrlRepo(db, client)
     svc = service.NewUrlService(repo)
 }
 
 func initDBTable() {
-    m := migration.NewMigrate(migration.Config{
-        DatabaseDriver: migration.PostgresDriver,
-        DatabaseURL:    `postgres://postgres:postgres@localhost:5432/` + os.Getenv("POSTGRES_DB") + `?sslmode=disable`,
-        SourceDriver:   migration.FileDriver,
-        SourceURL:      getMigrationPathByCaller(),
-        SchemaName:     "schema_migrations",
-    })
-    err := m.Refresh()
-    if err != nil {
-        println("reset database Error")
-    }
-}
-
-func getMigrationPathByCaller() string {
-    var abPath string
-    _, filename, _, ok := runtime.Caller(0)
-    if ok {
-        abPath = path.Dir(filename)
-    }
-    split := strings.Split(abPath, "/")
-    split[len(split)-1] = "migrations"
-    mPath := strings.Join(split, "/")
-    return mPath
+    var urls []model.Url
+    db.Find(&urls)
+    db.Delete(&urls)
 }
