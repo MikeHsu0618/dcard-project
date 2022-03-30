@@ -74,7 +74,7 @@ git clone https://github.com/MikeHsu0618/dcard-project.git
 ````bash
 # 在本專案的根目錄下執行以下指令即可
 cp .env.example .env
-docker compose up -d pg-master pg-slave dcard-project redis
+docker compose up -d dcard-project
 ````
 #### 初始化資料庫
 ```bash
@@ -104,6 +104,7 @@ COMMENT ON COLUMN urls.org_url IS '原網址'
 ----------------------------------------------------
 
 // migrate down
+
 DROP table IF EXISTS urls;
 ```
 
@@ -115,7 +116,7 @@ go test -v ./test
 
 #### Swagger Document
 ```
-// 運行成功起後, 可於以下路徑顯示 API 文件
+# 運行成功起後, 可於以下路徑顯示 API 文件
 http://localhost:8080/swagger/index.html
 ```
 

@@ -27,8 +27,6 @@ services:
     ports:
       - '5433:5432'
     restart: always
-    depends_on:
-      - pg-master
     networks:
       - fullstack
     environment:
@@ -48,6 +46,7 @@ services:
       - pg-master
       - pg-slave
       - redis
+    restart: always
     networks:
       - fullstack
 
@@ -60,7 +59,7 @@ services:
       - "8080:8080"
     volumes:
       - .:/app
-    command: gin -p 8080 /app/main.go
+    command: go run /app/cmd/app/main.go
     depends_on:
       - pg-master
       - pg-slave
