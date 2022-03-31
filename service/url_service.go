@@ -14,7 +14,7 @@ import (
 const (
 	LockKey       = "lock_key"
 	BasicAmount   = int64(20000)
-	UserAgentInfo = `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11`
+	UserAgentInfo = `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.83 Safari/537.36`
 )
 
 type UrlService struct {
