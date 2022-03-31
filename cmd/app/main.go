@@ -1,17 +1,23 @@
 package main
 
 import (
+	"context"
+	"fmt"
+	"log"
+	"net/http"
+	"os/signal"
+	"syscall"
+	"time"
+
 	"dcard-project/controller"
 	_ "dcard-project/docs"
 	"dcard-project/pkg/postgres"
 	"dcard-project/pkg/redis"
 	"dcard-project/repository"
 	"dcard-project/service"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"net/http"
 )
 
 func main() {
@@ -24,7 +30,37 @@ func main() {
 	urlSvc := service.NewUrlService(repo)
 	controller.NewHandler(&controller.Config{R: r, UrlSvc: urlSvc})
 
-	r.Run()
+	GracefulRunAndShutDown(r)
+}
+
+func GracefulRunAndShutDown(r *gin.Engine) {
+	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	defer stop()
+
+	srv := &http.Server{
+		Addr:    ":8080",
+		Handler: r,
+	}
+
+	go func() {
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("listen: %s \n", err)
+		}
+	}()
+
+	<-ctx.Done()
+
+	stop()
+	log.Println("shutting down gracefully, press Ctrl+C again to force")
+
+	// The context is used to inform the server it has 5 seconds to finish
+	// the request it is currently handling
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := srv.Shutdown(ctx); err != nil {
+		log.Fatal("Server forced to shutdown: ", err)
+	}
+	log.Println("Server exiting")
 }
 
 func setupStatic(r *gin.Engine) {

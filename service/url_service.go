@@ -1,14 +1,15 @@
 package service
 
 import (
+	"net/http"
+	"strings"
+	"time"
+
 	"dcard-project/model"
 	"dcard-project/pkg/decimalconv"
 	"dcard-project/pkg/goquery"
 	"dcard-project/pkg/httputil"
 	"github.com/gin-gonic/gin"
-	"net/http"
-	"strings"
-	"time"
 )
 
 const (
@@ -71,13 +72,13 @@ func (s *UrlService) CreateUrl(c *gin.Context) {
 		return
 	}
 
-	//產生短網址
+	// 產生短網址
 	shortUrl = decimalconv.Encode(BasicAmount + url.ID)
 	data := model.ApiUrl{
 		ShortUrl: shortUrl,
 		Meta:     meta,
 	}
-	//保存三十天過期
+	// 保存三十天過期
 	s.repo.SetCache(url.ID, url.OrgUrl)
 
 	httputil.NewSuccess(c, data)
