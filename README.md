@@ -23,15 +23,17 @@
 ### 如何實現短網址服務
 
 
-↓↓↓↓↓↓↓ 篇幅稍長另開新頁 ↓↓↓↓↓↓↓
-
-
 * [實現介紹以及細節](./docs/README.md)
 
-
-↑↑↑↑↑↑↑ 篇幅稍長另開新頁 ↑↑↑↑↑↑↑
+<a href="./docs/README.md">
+<img src="./resources/asset/gif/click_here.gif" width="70%"/>
+</a>
 
 ### Demo 連結
+
+<a href="http://www.d-project.link">
+<img src="./resources/asset/gif/index_1.gif" width="70%"/>
+</a>
 
 - [http://www.d-project.link](http://www.d-project.link)
 
