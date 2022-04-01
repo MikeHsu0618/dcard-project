@@ -4,25 +4,19 @@ import (
 	"github.com/alicebob/miniredis/v2"
 	"github.com/go-redis/redis/v8"
 	_ "github.com/joho/godotenv/autoload"
-	"os"
 )
 
 var client *redis.Client
 
 type Config struct {
-	address string
-	pws     string
+	Address string
+	Pws     string
 }
 
-func NewRedisClient() *redis.Client {
-	config := Config{
-		address: os.Getenv("REDIS_HOST") + ":" + os.Getenv("REDIS_PORT"),
-		pws:     os.Getenv("REDIS_PASSWORD"),
-	}
-
+func NewRedisClient(config Config) *redis.Client {
 	client = redis.NewClient(&redis.Options{
-		Addr:     config.address,
-		Password: config.pws, // no password set
+		Addr:     config.Address,
+		Password: config.Pws, // no password set
 		DB:       0,          // use default DB
 	})
 

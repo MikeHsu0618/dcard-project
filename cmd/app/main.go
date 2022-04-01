@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
 	"net/http"
+	"os"
 	"os/signal"
 	"syscall"
 	"time"
@@ -22,6 +22,27 @@ import (
 )
 
 var (
+	PGMaster = postgres.Config{
+		Host: os.Getenv("POSTGRES_HOST"),
+		User: os.Getenv("POSTGRES_USER"),
+		Db:   os.Getenv("POSTGRES_DB"),
+		Pwd:  os.Getenv("POSTGRES_PASSWORD"),
+		Port: os.Getenv("POSTGRES_PORT"),
+	}
+	PGSlave = postgres.Config{
+		Host: os.Getenv("POSTGRES_SLAVE_HOST"),
+		User: os.Getenv("POSTGRES_SLAVE_USER"),
+		Db:   os.Getenv("POSTGRES_SLAVE_DB"),
+		Pwd:  os.Getenv("POSTGRES_SLAVE_PASSWORD"),
+		Port: os.Getenv("POSTGRES_SLAVE_PORT"),
+	}
+	RdsConfig = redis.Config{
+		Address: os.Getenv("REDIS_HOST") + ":" + os.Getenv("REDIS_PORT"),
+		Pws:     os.Getenv("REDIS_PASSWORD"),
+	}
+)
+
+var (
 	r  *gin.Engine
 	lg *logger.Logger
 )
@@ -29,11 +50,11 @@ var (
 func main() {
 	r = gin.Default()
 	setupStatic(r)
-	db := postgres.NewPgClient()
-	client := redis.NewRedisClient()
+	db := postgres.NewPgClient(PGMaster, PGSlave)
+	rdsClient := redis.NewRedisClient(RdsConfig)
 	lg = logger.NewLogger()
 
-	repo := repository.NewUrlRepo(db, client, lg)
+	repo := repository.NewUrlRepo(db, rdsClient, lg)
 	urlSvc := service.NewUrlService(repo)
 	controller.NewHandler(&controller.Config{R: r, UrlSvc: urlSvc})
 
@@ -58,7 +79,7 @@ func GracefulRunAndShutDown() {
 	<-ctx.Done()
 
 	stop()
-	log.Println("shutting down gracefully, press Ctrl+C again to force")
+	lg.Info("shutting down gracefully, press Ctrl+C again to force")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
