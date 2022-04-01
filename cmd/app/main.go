@@ -11,6 +11,7 @@ import (
 
 	"dcard-project/controller"
 	_ "dcard-project/docs"
+	"dcard-project/pkg/logger"
 	"dcard-project/pkg/postgres"
 	"dcard-project/pkg/redis"
 	"dcard-project/repository"
@@ -20,20 +21,26 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func main() {
-	r := gin.Default()
+var (
+	r  *gin.Engine
+	lg *logger.Logger
+)
 
+func main() {
+	r = gin.Default()
 	setupStatic(r)
 	db := postgres.NewPgClient()
 	client := redis.NewRedisClient()
-	repo := repository.NewUrlRepo(db, client)
+	lg = logger.NewLogger()
+
+	repo := repository.NewUrlRepo(db, client, lg)
 	urlSvc := service.NewUrlService(repo)
 	controller.NewHandler(&controller.Config{R: r, UrlSvc: urlSvc})
 
-	GracefulRunAndShutDown(r)
+	GracefulRunAndShutDown()
 }
 
-func GracefulRunAndShutDown(r *gin.Engine) {
+func GracefulRunAndShutDown() {
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
 
@@ -44,7 +51,7 @@ func GracefulRunAndShutDown(r *gin.Engine) {
 
 	go func() {
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("listen: %s \n", err)
+			lg.Fatal("listen: " + err.Error())
 		}
 	}()
 
@@ -53,14 +60,12 @@ func GracefulRunAndShutDown(r *gin.Engine) {
 	stop()
 	log.Println("shutting down gracefully, press Ctrl+C again to force")
 
-	// The context is used to inform the server it has 5 seconds to finish
-	// the request it is currently handling
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err := srv.Shutdown(ctx); err != nil {
-		log.Fatal("Server forced to shutdown: ", err)
+		lg.Fatal("Server forced to shutdown: " + err.Error())
 	}
-	log.Println("Server exiting")
+	lg.Info("Server exiting")
 }
 
 func setupStatic(r *gin.Engine) {
