@@ -11,7 +11,7 @@ type Handler struct {
 }
 
 type Config struct {
-	R      *gin.Engine
+	Router *gin.Engine
 	UrlSvc repository.UrlService
 }
 
@@ -20,7 +20,7 @@ func NewHandler(c *Config) {
 		urlSvc: c.UrlSvc,
 	}
 
-	v1Group := c.R.Group("/")
+	v1Group := c.Router.Group("/")
 	v1Group.Use(middleware.IPLimitIntercept())
 	{
 		v1Group.POST("", handler.urlSvc.CreateUrl)

@@ -59,7 +59,7 @@ func main() {
 	middleware.Setup(rdsClient)
 	repo := repository.NewUrlRepo(db, rdsClient, lg)
 	urlSvc := service.NewUrlService(repo)
-	controller.NewHandler(&controller.Config{R: r, UrlSvc: urlSvc})
+	controller.NewHandler(&controller.Config{Router: r, UrlSvc: urlSvc})
 
 	GracefulRunAndShutDown()
 }
