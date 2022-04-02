@@ -18,6 +18,7 @@ import (
 	"dcard-project/pkg/postgres"
 	"dcard-project/pkg/redis"
 	"github.com/gin-gonic/gin"
+	_ "github.com/joho/godotenv/autoload"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )

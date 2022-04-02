@@ -3,7 +3,6 @@ package redis
 import (
 	"github.com/alicebob/miniredis/v2"
 	"github.com/go-redis/redis/v8"
-	_ "github.com/joho/godotenv/autoload"
 )
 
 var client *redis.Client

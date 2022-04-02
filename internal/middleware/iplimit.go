@@ -15,6 +15,13 @@ const (
 	IPLimitPeriod           = 60
 	IPLimitTimeFormat       = "2006-01-02 15:04:05"
 	IPLimitMaximum    int64 = 100
+	script                  = `
+		local count = redis.call('incr', KEYS[1])
+		if count == 1 then
+		redis.call('expire', KEYS[1], tonumber(KEYS[2]))
+		end
+		return count
+	`
 )
 
 var ctx = context.Background()
@@ -30,7 +37,6 @@ func IPLimitIntercept() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		now := time.Now().Unix()
 		amount = getCurrentAmount(c)
-		rdsClient.Set(ctx, key, amount+1, IPLimitPeriod*time.Second)
 		reset := time.Unix(now+IPLimitPeriod, 0).Format(IPLimitTimeFormat)
 		c.Header("X-RateLimit-Remaining", strconv.FormatInt(IPLimitMaximum-amount, 10))
 		c.Header("X-RateLimit-Reset", reset)
@@ -40,16 +46,17 @@ func IPLimitIntercept() gin.HandlerFunc {
 func getCurrentAmount(c *gin.Context) (amount int64) {
 	var err error
 	key = c.Request.Method + "-" + c.ClientIP()
-	amount, err = rdsClient.Get(ctx, key).Int64()
-	if err == redis.Nil {
-		return 0
-	}
+	var luaScript = redis.NewScript(script)
+	// 執行腳本
+	amount, err = luaScript.Run(ctx, rdsClient, []string{key, strconv.Itoa(IPLimitPeriod)}).Int64()
 	if err != nil {
 		httputil.NewError(c, http.StatusInternalServerError, err.Error())
+		c.Abort()
 		return
 	}
-	if amount >= IPLimitMaximum {
-		httputil.NewError(c, http.StatusInternalServerError, err.Error())
+	if amount > IPLimitMaximum {
+		httputil.NewError(c, http.StatusTooManyRequests, "too many request")
+		c.Abort()
 		return
 	}
 

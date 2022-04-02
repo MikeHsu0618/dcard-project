@@ -3,7 +3,6 @@ package postgres
 import (
 	"fmt"
 
-	_ "github.com/joho/godotenv/autoload"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/plugin/dbresolver"
