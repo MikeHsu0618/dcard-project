@@ -6,9 +6,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"dcard-project/model"
+	"dcard-project/internal/repository"
+	"dcard-project/internal/service"
 	"dcard-project/pkg/decimalconv"
-	"dcard-project/service"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -29,7 +29,7 @@ func Test_CreateUrl(t *testing.T) {
 	req.Header.Set("Content-Type", "application/json")
 	r.ServeHTTP(w, req)
 
-	var url = &model.Url{}
+	var url = &repository.Url{}
 	var count int64
 	db.Model(url).Count(&count)
 	db.First(url)
@@ -78,7 +78,7 @@ func Test_ToOrgPage(t *testing.T) {
 	assert.Contains(t, w.Body.String(), "無效的地址")
 
 	// 2. 有效的地址 -> 302 轉址
-	url := &model.Url{OrgUrl: "https://www.google.com"}
+	url := &repository.Url{OrgUrl: "https://www.google.com"}
 	db.Create(url)
 	shortUrl := decimalconv.Encode(service.BasicAmount + url.ID)
 	w = httptest.NewRecorder() // 取得 ResponseRecorder 物件

@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"dcard-project/model"
+	"dcard-project/internal/repository"
 	"dcard-project/pkg/decimalconv"
 	"dcard-project/pkg/goquery"
 	"dcard-project/pkg/httputil"
@@ -19,10 +19,10 @@ const (
 )
 
 type UrlService struct {
-	repo model.UrlRepository
+	repo repository.UrlRepository
 }
 
-func NewUrlService(urlRepo model.UrlRepository) model.UrlService {
+func NewUrlService(urlRepo repository.UrlRepository) repository.UrlService {
 	return &UrlService{repo: urlRepo}
 }
 
@@ -31,11 +31,11 @@ func NewUrlService(urlRepo model.UrlRepository) model.UrlService {
 // @Tags Url
 // @Accept json
 // @Produce json
-// @Param url body model.CreateUrl true "Get Short Url"
-// @Success 200 {object} model.ApiUrl
+// @Param url body repository.CreateUrl true "Get Short Url"
+// @Success 200 {object} repository.ApiUrl
 // @Router / [post]
 func (s *UrlService) CreateUrl(c *gin.Context) {
-	var url = &model.Url{}
+	var url = &repository.Url{}
 	var shortUrl string
 	// 接收參數
 	if err := c.ShouldBind(&url); err != nil {
@@ -62,7 +62,7 @@ func (s *UrlService) CreateUrl(c *gin.Context) {
 			return
 		}
 		shortUrl = decimalconv.Encode(BasicAmount + duplicateUrl.ID)
-		httputil.NewSuccess(c, model.ApiUrl{
+		httputil.NewSuccess(c, repository.ApiUrl{
 			ShortUrl: shortUrl,
 			Meta:     meta,
 		})
@@ -74,7 +74,7 @@ func (s *UrlService) CreateUrl(c *gin.Context) {
 
 	// 產生短網址
 	shortUrl = decimalconv.Encode(BasicAmount + url.ID)
-	data := model.ApiUrl{
+	data := repository.ApiUrl{
 		ShortUrl: shortUrl,
 		Meta:     meta,
 	}
@@ -85,7 +85,7 @@ func (s *UrlService) CreateUrl(c *gin.Context) {
 }
 
 func (s *UrlService) ToOrgPage(c *gin.Context) {
-	var url = &model.Url{}
+	var url = &repository.Url{}
 	index := decimalconv.Decode(c.Param("shortUrl")) - BasicAmount
 	// 使用快取
 	if orgUrl, err := s.repo.GetCache(index); err == nil && len(orgUrl) != 0 {

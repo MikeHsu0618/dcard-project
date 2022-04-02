@@ -36,7 +36,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.CreateUrl"
+                            "$ref": "#/definitions/repository.CreateUrl"
                         }
                     }
                 ],
@@ -44,7 +44,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.ApiUrl"
+                            "$ref": "#/definitions/repository.ApiUrl"
                         }
                     }
                 }
@@ -52,7 +52,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "model.ApiUrl": {
+        "repository.ApiUrl": {
             "type": "object",
             "properties": {
                 "description": {
@@ -73,7 +73,7 @@ const docTemplate = `{
                 }
             }
         },
-        "model.CreateUrl": {
+        "repository.CreateUrl": {
             "type": "object",
             "properties": {
                 "org_url": {

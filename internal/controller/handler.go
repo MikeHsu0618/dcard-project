@@ -1,18 +1,18 @@
 package controller
 
 import (
-	"dcard-project/middleware"
-	"dcard-project/model"
+	"dcard-project/internal/middleware"
+	"dcard-project/internal/repository"
 	"github.com/gin-gonic/gin"
 )
 
 type Handler struct {
-	urlSvc model.UrlService
+	urlSvc repository.UrlService
 }
 
 type Config struct {
 	R      *gin.Engine
-	UrlSvc model.UrlService
+	UrlSvc repository.UrlService
 }
 
 func NewHandler(c *Config) {

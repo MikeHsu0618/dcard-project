@@ -4,11 +4,10 @@ import (
 	"os"
 	"testing"
 
-	"dcard-project/model"
+	"dcard-project/internal/repository"
+	"dcard-project/internal/service"
 	"dcard-project/pkg/logger"
 	rds "dcard-project/pkg/redis"
-	"dcard-project/repository"
-	"dcard-project/service"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 	"gorm.io/driver/sqlite"
@@ -19,7 +18,7 @@ var (
 	db        *gorm.DB
 	rdsClient *redis.Client
 	lg        *logger.Logger
-	svc       model.UrlService
+	svc       repository.UrlService
 	r         = gin.Default()
 )
 
@@ -50,7 +49,7 @@ func initService() {
 }
 
 func initDBTable() {
-	var urls []model.Url
+	var urls []repository.Url
 	db.Find(&urls)
 	db.Delete(&urls)
 }
