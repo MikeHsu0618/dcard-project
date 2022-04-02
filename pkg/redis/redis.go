@@ -35,7 +35,3 @@ func NewTestRedisClient() *redis.Client {
 	})
 	return client
 }
-
-func GetRedisClient() *redis.Client {
-	return client
-}

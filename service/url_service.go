@@ -48,7 +48,7 @@ func (s *UrlService) CreateUrl(c *gin.Context) {
 	req.Header.Set("User-Agent", UserAgentInfo)
 	res, err := client.Do(req)
 	if err != nil || res.StatusCode != http.StatusOK {
-		httputil.NewError(c, http.StatusNotFound, "invalid url")
+		httputil.NewError(c, http.StatusBadRequest, "invalid url")
 		return
 	}
 	meta := goquery.GetHtmlMeta(res.Body)
@@ -58,7 +58,7 @@ func (s *UrlService) CreateUrl(c *gin.Context) {
 		(strings.Contains(err.Error(), "duplicate") || strings.Contains(err.Error(), "UNIQUE")) {
 		duplicateUrl, err := s.repo.GetByOrgUrl(url.OrgUrl)
 		if err != nil {
-			httputil.NewError(c, http.StatusNotFound, "data error")
+			httputil.NewError(c, http.StatusServiceUnavailable, "data error")
 			return
 		}
 		shortUrl = decimalconv.Encode(BasicAmount + duplicateUrl.ID)
@@ -68,7 +68,7 @@ func (s *UrlService) CreateUrl(c *gin.Context) {
 		})
 		return
 	} else if err != nil {
-		httputil.NewError(c, http.StatusNotFound, "create fail")
+		httputil.NewError(c, http.StatusServiceUnavailable, "create fail")
 		return
 	}
 
