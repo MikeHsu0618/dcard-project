@@ -17,6 +17,7 @@ func NewRedisClient(config Config) *redis.Client {
 		Addr:     config.Address,
 		Password: config.Pws, // no password set
 		DB:       0,          // use default DB
+		PoolSize: 10,
 	})
 
 	return client
