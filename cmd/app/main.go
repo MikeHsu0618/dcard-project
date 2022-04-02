@@ -11,6 +11,7 @@ import (
 
 	"dcard-project/controller"
 	_ "dcard-project/docs"
+	"dcard-project/middleware"
 	"dcard-project/pkg/logger"
 	"dcard-project/pkg/postgres"
 	"dcard-project/pkg/redis"
@@ -54,6 +55,7 @@ func main() {
 	rdsClient := redis.NewRedisClient(RdsConfig)
 	lg = logger.NewLogger()
 
+	middleware.Setup(rdsClient)
 	repo := repository.NewUrlRepo(db, rdsClient, lg)
 	urlSvc := service.NewUrlService(repo)
 	controller.NewHandler(&controller.Config{R: r, UrlSvc: urlSvc})

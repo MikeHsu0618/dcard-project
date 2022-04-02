@@ -2,15 +2,16 @@ package main
 
 import (
 	"bytes"
+	"net/http"
+	"net/http/httptest"
+	"testing"
+
 	"dcard-project/model"
 	"dcard-project/pkg/decimalconv"
 	"dcard-project/service"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"net/http"
-	"net/http/httptest"
-	"testing"
 )
 
 func Test_CreateUrl(t *testing.T) {
@@ -54,7 +55,7 @@ func Test_CreateUrl(t *testing.T) {
 	req.Header.Set("Content-Type", "application/json")
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusNotFound, w.Code)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 	assert.Contains(t, w.Body.String(), "invalid url")
 }
 
